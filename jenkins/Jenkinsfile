@@ -2,29 +2,29 @@ pipeline {
     agent any
 
     stages {
-        // stage('Run backend tests') {
-        //     agent {
-        //         docker {
-        //             image 'snakee/golang-junit:1.21'
-        //             reuseNode true
-        //         }
-        //     }
-        //     steps {
-        //         dir('bugtracker-backend') {
-        //             sh '''
-        //                 # Set Go cache to a writable location
-        //                 export GOCACHE="$PWD/.cache/go-build"
-        //                 export GOMODCACHE="$PWD/.cache/go-mod"
+        stage('Run backend tests') {
+            agent {
+                docker {
+                    image 'snakee/golang-junit:1.21'
+                    reuseNode true
+                }
+            }
+            steps {
+                dir('bugtracker-backend') {
+                    sh '''
+                        # Set Go cache to a writable location
+                        export GOCACHE="$PWD/.cache/go-build"
+                        export GOMODCACHE="$PWD/.cache/go-mod"
                         
-        //                 # Create cache directories
-        //                 mkdir -p "$GOCACHE" "$GOMODCACHE"
+                        # Create cache directories
+                        mkdir -p "$GOCACHE" "$GOMODCACHE"
                         
-        //                 # Run the tests
-        //                 go test -v ./...
-        //             '''
-        //         }
-        //     }
-        // }
+                        # Run the tests
+                        go test -v ./...
+                    '''
+                }
+            }
+        }
 
         stage('Run frontend tests') {
             agent {
@@ -39,6 +39,11 @@ pipeline {
                      npm ci
                      npm test
                     '''
+                }
+            }
+            post {
+                always {
+                    junit 'bugtracker-frontend/test-results.xml'
                 }
             }
 
