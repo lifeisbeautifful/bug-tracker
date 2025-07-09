@@ -2,11 +2,17 @@ pipeline {
     agent any
 
     stages {
-        stage('Hello') {
+        stage('Run backend tests') {
+            agent {
+                docker {
+                    image 'snakee/goland-junit:1.21'
+                    reuseNode true
+                }
+            }
             steps {
-                echo 'Hello World'
-                sh 'echo "Hello"'
-                sh 'echo "Jenkins"'
+                dir('bugtracker-backend') {
+                    sh 'go test -v ./...'
+                }
             }
         }
     }
