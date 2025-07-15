@@ -74,11 +74,11 @@ pipeline {
             }
             post {
                 always {
-                    junit 'tests-api/test-results/results.xml'
+                    junit 'bugtracker-backend/report.xml'
                     publishHTML target: [
-                        reportDir 'tests-api/playwright-report',
-                        reportFiles 'index.html',
-                        reportName 'API tests'
+                        reportDir: 'tests-api/test-results',
+                        reportFiles: 'index.html',
+                        reportName: 'api coverage report'
                     ]
                 }
             }
