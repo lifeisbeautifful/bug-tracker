@@ -124,11 +124,13 @@ pipeline {
                 }
             }
             post {
-                publishHTML target: [
-                    reportDir: 'test-perf',
-                    reportFiles: 'perf-results.html',
-                    reportName: 'Performance tests report'
-                ]
+                always {
+                    publishHTML target: [
+                        reportDir: 'test-perf',
+                        reportFiles: 'perf-results.html',
+                        reportName: 'Performance tests report'
+                    ]
+                }
             }
         }
 
