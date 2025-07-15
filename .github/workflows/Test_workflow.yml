@@ -4,6 +4,9 @@ on:
   push:
     branches:
       - main
+  pull_request:
+    branches:
+      - main
   workflow_dispatch:
 
 jobs:
@@ -35,7 +38,6 @@ jobs:
           reporter: jest-junit
 
   unit-tests-frontend:
-    needs: unit-tests-backend
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
