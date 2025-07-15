@@ -16,10 +16,10 @@ jobs:
         uses: actions/setup-go@v4
         with:
           go-version: "1.21"
-          cache-dependency-path: 'bugtracker-backend/go.sum'
+          cache-dependency-path: bugtracker-backend/go.sum
 
       - name: Execute backend tests
-        working-directory: './bugtracker-backend'
+        working-directory: ./bugtracker-backend
         run: |
           go test -v ./...
 
@@ -37,7 +37,15 @@ jobs:
           cache-dependency-path: bugtracker-frontend/package-lock.json
 
       - name: Execute frontend tests
-        working-directory: './bugtracker-frontend'
+        working-directory: ./bugtracker-frontend
         run: |
           npm ci
           npm test
+
+      - name: Frontend tests report
+        uses: dorny/test-reporter@v1
+        if: always()
+        with:
+          name: Frontend results
+          path: bugtracker-frontend/test-results.xml
+          reporter: jest-junit
