@@ -63,7 +63,7 @@ jobs:
           path: bugtracker-frontend/test-results.xml
           reporter: jest-junit
 
-  api-and-e2e-tests:
+  api-e2e-perf-tests:
     needs: [unit-tests-backend, unit-tests-frontend]
     runs-on: ubuntu-latest
     steps:
@@ -87,6 +87,15 @@ jobs:
           npm ci
           npx playwright install
           npx playwright test
+
+      - name: setup k6
+        uses: grafana/setup-k6-action@v1
+
+      - name: run performanve test
+        uses: grafana/run-k6--action@v1
+        with:
+          path: tests-perf/script.js
+          flags: --out json=summary.json
 
       - name: Shutdown application
         run: docker compose down
