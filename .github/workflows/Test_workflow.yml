@@ -92,7 +92,7 @@ jobs:
         uses: grafana/setup-k6-action@v1
 
       - name: run performanve test
-        uses: grafana/run-k6--action@v1
+        uses: grafana/run-k6-action@v1
         with:
           path: tests-perf/script.js
           flags: --out json=summary.json
@@ -130,6 +130,22 @@ jobs:
         with:
           name: e2e tests playwright report
           path: ./tests-e2e/playwright-report
+          retention-days: 30
+
+      - name: upload perf raw report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: perf raw test results
+          path: summary.json
+          retention-days: 30
+
+      - name: upload perf html report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: perf html test results
+          path: perf-results.html
           retention-days: 30
 
       - name: publish api tests results
