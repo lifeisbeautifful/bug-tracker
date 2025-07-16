@@ -103,7 +103,7 @@ jobs:
       - name: publish api tests results
         uses: dorny/test-reporter@v1
         if: always()
-          with:
-            name: API tests publish results
-            path: ./tests-api/test-results/*.xml
-            reporter: jest-junit
+        with:
+          name: API tests publish results
+          path: ./tests-api/test-results/*.xml
+          reporter: jest-junit
