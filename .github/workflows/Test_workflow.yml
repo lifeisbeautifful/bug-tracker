@@ -63,7 +63,7 @@ jobs:
           path: bugtracker-frontend/test-results.xml
           reporter: jest-junit
 
-  api-tests:
+  api-and-e2e-tests:
     needs: [unit-tests-backend, unit-tests-frontend]
     runs-on: ubuntu-latest
     steps:
@@ -75,10 +75,17 @@ jobs:
           docker compose up --build -d
           npx wait-port http://localhost:8080/api/health -t 30000
 
-      - name: run tests
+      - name: run api tests
         working-directory: ./tests-api
         run: |
           npm ci
+          npx playwright test
+
+      - name: run e2e tests
+        working-directory: ./tests-e2e
+        run: |
+          npm ci
+          npx playwright install
           npx playwright test
 
       - name: Shutdown application
@@ -89,7 +96,7 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: api-tests-results
-          path: ./test-api/test-results/
+          path: ./tests-api/test-results/
           retention-days: 30
 
       - name: upload api playwright report
